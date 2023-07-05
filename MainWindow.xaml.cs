@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace unix_convert
 {
@@ -20,6 +23,7 @@ namespace unix_convert
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly Regex regex = new Regex(@"^\d+$");
         public MainWindow()
         {
             InitializeComponent();
@@ -27,29 +31,43 @@ namespace unix_convert
 
         private void ButtonConvertUnixToDateTime_Click(object sender, RoutedEventArgs e)
         {
-            var input = long.Parse(txtUnixInput.Text);
+            var errorMessage = "Sorry, this time is not valid." + System.Environment.NewLine + System.Environment.NewLine + "Check your timestamp, strip letters and punctuation marks.";
 
-            if (input >= Decimal.Parse("1E11", System.Globalization.NumberStyles.Float))
+            if (regex.IsMatch(txtUnixInput.Text))
             {
-                DateTimeOffset offset = DateTimeOffset.FromUnixTimeMilliseconds(input);
-                output.Items.Clear();
-                output.Items.Add(offset);
+                var input = long.Parse(txtUnixInput.Text);
+
+                if (!string.IsNullOrWhiteSpace(txtUnixInput.Text))
+                {
+                    var offsetFormat = "dddd, dd MMMM yyyy" + System.Environment.NewLine + "h:mm tt";
+
+                    if (input >= Decimal.Parse("1E11", System.Globalization.NumberStyles.Float))
+                    {
+                        DateTimeOffset offset = DateTimeOffset.FromUnixTimeMilliseconds(input);
+                        output.Clear();
+                        output.Text = offset.ToString(offsetFormat);
+                    }
+                    else
+                    {
+                        DateTimeOffset offset = DateTimeOffset.FromUnixTimeSeconds(input);
+                        output.Clear();
+                        output.Text = offset.ToString(offsetFormat);
+                    }
+
+                    output.AppendText(System.Environment.NewLine + System.Environment.NewLine + txtUnixInput.Text);
+
+                    txtUnixInput.Clear();
+                }
             }
             else
             {
-                DateTimeOffset offset = DateTimeOffset.FromUnixTimeSeconds(input);
-                output.Items.Clear();
-                output.Items.Add(offset);
+                output.Text = errorMessage;
             }
-
-            output.Items.Add(txtUnixInput.Text);
-
-            txtUnixInput.Clear();
         }
 
         private void ButtonClear_Click(object sender, RoutedEventArgs e)
         {
-            output.Items.Clear();
+            output.Clear();
             txtUnixInput.Clear();
         }
     }
