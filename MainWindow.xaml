@@ -7,12 +7,12 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         Title="Unix Converter" Height="210" Width="400">
-    <Grid Margin="10">
-
-
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -20,20 +20,21 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label HorizontalAlignment="Center" FontWeight="Bold" Foreground="#666">Input Unix Time</Label>
+        <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" FontWeight="Bold" Foreground="#666">Input Unix Time</Label>
 
-        <Label HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Foreground="#666" FontWeight="Bold">Date/Time Output</Label>
+        <Label HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Foreground="#666" FontWeight="Bold">Date/Time Output</Label>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="5,5,5,5">
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="5,5,5,5">
             <TextBox x:Name="txtUnixInput" Foreground="Black" >
             </TextBox>
-            <Button x:Name="btnConvert" Margin="5,5,5,5" Click="ButtonConvertUnixToDateTime_Click" HorizontalAlignment="Stretch" Foreground="Black" Background="#33000000">
+            <Button x:Name="btnConvert" Margin="5,5,5,5" Click="ButtonConvertUnixToDateTime_Click" HorizontalAlignment="Stretch" Foreground="Black" Background="#33000000" IsDefault="True">
                 Submit
             </Button>
-            <Button x:Name="btnClear" Margin="5,5,5,5" Click="ButtonClear_Click" HorizontalAlignment="Stretch" VerticalAlignment="Center" Foreground="Black">
+            <Button x:Name="btnClear" Margin="5,5,5,5" Click="ButtonClear_Click" HorizontalAlignment="Stretch" VerticalAlignment="Center" Foreground="Black" IsCancel="True">
                 Clear
             </Button>
         </StackPanel>
-        <TextBox x:Name="output" TextAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="0,5,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Height="100" IsReadOnly="True"/>
+        <TextBox x:Name="output" TextAlignment="Center" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Height="100" IsReadOnly="True"/>
+        <TextBox x:Name="errorOutput" TextAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="5,5,5,5" Grid.Row="3" VerticalAlignment="Center" Width="370" BorderBrush="{x:Null}" IsReadOnly="True" IsUndoEnabled="False" SelectionBrush="{x:Null}" Foreground="Red" FontWeight="Bold" FontStyle="Italic" />
     </Grid>
 </Window>
